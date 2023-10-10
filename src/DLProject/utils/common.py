@@ -48,3 +48,23 @@ def create_directories(path_to_directories: list, verbose=True):
         os.makedirs(path, exist_ok=True)
         if verbose:
             logger.info(f"Created directory at: {path}")
+
+
+@ensure_annotations
+def get_size(path: Path) -> str:
+    """Get the size of a file in KB.
+
+    Args:
+        path (Path): path to the file
+
+    Returns:
+        str: Size in KB as a string.
+    """
+    try:
+        size_in_bytes = os.path.getsize(path)
+        size_in_kb = round(size_in_bytes / 1024)
+        return f"~ {size_in_kb} KB"
+    except FileNotFoundError:
+        return "File not found"
+    except Exception as e:
+        return f"Error in getting size of a file in KB: {str(e)}"

@@ -161,3 +161,7 @@ cython_debug/
 
 # log folder
 logs/
+
+# Data Folder
+research/Kidney-CT-Scan-Data.zip
+artifacts/

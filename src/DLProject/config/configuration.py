@@ -1,6 +1,8 @@
 from DLProject.constants import *
 from DLProject.utils.common import read_yaml, create_directories
-from DLProject.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig
+from DLProject.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig
+import os
+
 
 class ConfigurationManager:
     def __init__(
@@ -45,4 +47,39 @@ class ConfigurationManager:
         )
 
         return prepare_base_model_config
+    
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config.training
+        prepare_base_model = self.config.prepare_base_model
+        params = self.params
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir, training.source_dir)
+        create_directories([
+            Path(training.root_dir)
+        ])
+
+        training_config = TrainingConfig(
+            root_dir=Path(training.root_dir),
+            trained_model_path=Path(training.trained_model_path),
+            updated_base_model_path=Path(prepare_base_model.updated_base_model_path),
+            training_data=Path(training_data),
+            params_epochs=params.EPOCHS,
+            params_batch_size=params.BATCH_SIZE,
+            params_is_augmentation=params.AUGMENTATION,
+            params_image_size=params.IMAGE_SIZE,
+            params_validation_split=params.VALIDATION_SPLIT,
+            params_interpolation=params.INTERPOLATION,
+            params_validation_data_generator_subset=params.VALIDATION_DATA_GENERATOR_SUBSET,
+            params_training_data_generator_subset=params.TRAINING_DATA_GENERATOR_SUBSET,
+            params_is_validation_data_generator_shuffle=params.VALIDATION_DATA_GENERATOR_SHUFFLE,
+            params_is_training_data_generator_shuffle=params.TRAINING_DATA_GENERATOR_SHUFFLE,
+            params_rotation_range=params.ROTATION_RANGE,
+            params_is_horizontal_flip=params.HORIZONTAL_FLIP,
+            params_width_shift_range=params.WIDTH_SHIFT_RANGE,
+            params_height_shift_range=params.HEIGH_SHIFT_RANGE,
+            params_shear_range=params.SHEAR_RANGE,
+            params_zoom_range=params.ZOOM_RANGE,
+            source_dir=Path(training.source_dir)
+        )
+
+        return training_config
 

@@ -5,6 +5,7 @@ import yaml
 from DLProject import logger
 from box.exceptions import BoxValueError
 import os
+import json
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
@@ -68,3 +69,22 @@ def get_size(path: Path) -> str:
         return "File not found"
     except Exception as e:
         return f"Error in getting size of a file in KB: {str(e)}"
+
+
+@ensure_annotations
+def save_json(path: Path, data: dict):
+    """Save JSON data to a file.
+
+    Args:
+        path (Path): path to the JSON file
+        data (dict): Data to be saved in the JSON file
+    """
+    try:
+        with open(path, "w") as f:
+            json.dump(data, f, indent=4)
+
+        logger.info(f"JSON file saved at: {path}")
+
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        logger.error(f"Error saving JSON file: {e}")
+        raise ValueError(f"Failed to save JSON file at: {path}")

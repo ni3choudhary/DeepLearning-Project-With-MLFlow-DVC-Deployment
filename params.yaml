@@ -6,3 +6,15 @@ EPOCHS: 1
 CLASSES: 4
 WEIGHTS: imagenet
 LEARNING_RATE: 0.01
+VALIDATION_SPLIT: 0.20  # Sets the validation data split of the dataset.
+INTERPOLATION: bilinear # Specifies interpolation for image resizing
+VALIDATION_DATA_GENERATOR_SUBSET: validation # Configures data generator for the validation subset
+TRAINING_DATA_GENERATOR_SUBSET: training  # Configures data generator for the training subset
+VALIDATION_DATA_GENERATOR_SHUFFLE: False  # enable/disable shuffling of validation data
+TRAINING_DATA_GENERATOR_SHUFFLE: True     # enable/disable shuffling of training data
+ROTATION_RANGE: 40      # Allows random rotation of images in degrees
+HORIZONTAL_FLIP: True   # Permits horizontal flipping of images during augmentation
+WIDTH_SHIFT_RANGE: 0.2  # Allows horizontal shifting of images
+HEIGH_SHIFT_RANGE: 0.2  # Allows vertical shifting of images
+SHEAR_RANGE: 0.2        # Allows shearing of images 
+ZOOM_RANGE: 0.2         # Permits random zooming of images

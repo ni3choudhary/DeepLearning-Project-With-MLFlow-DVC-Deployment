@@ -1,8 +1,15 @@
 from DLProject.constants import *
 from DLProject.utils.common import read_yaml, create_directories
-from DLProject.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig
+from DLProject.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig, EvaluationConfig
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
+MLFLOW_TRACKING_USERNAME = os.getenv("MLFLOW_TRACKING_USERNAME")
+MLFLOW_TRACKING_PASSWORD = os.getenv("MLFLOW_TRACKING_PASSWORD")
 
 class ConfigurationManager:
     def __init__(
@@ -82,4 +89,18 @@ class ConfigurationManager:
         )
 
         return training_config
+
+    def get_evaluation_config(self) -> EvaluationConfig:
+        training = self.config.training
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir, training.source_dir)
+        
+        eval_config = EvaluationConfig(
+            path_of_model=Path(training.trained_model_path),
+            training_data=Path(training_data),
+            mlflow_uri=MLFLOW_TRACKING_URI,
+            all_params=self.params,
+            params_image_size=self.params.IMAGE_SIZE,
+            params_batch_size=self.params.BATCH_SIZE
+        )
+        return eval_config
 

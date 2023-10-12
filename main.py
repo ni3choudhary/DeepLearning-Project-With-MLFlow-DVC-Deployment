@@ -2,6 +2,7 @@ from DLProject import logger
 from DLProject.pipeline.step_01_data_ingestion import DataIngestionTrainingPipeline
 from DLProject.pipeline.step_02_prepare_base_model import PrepareBaseModelTrainingPipeline
 from DLProject.pipeline.step_03_model_training import ModelTrainingPipeline
+from DLProject.pipeline.step_04_model_evaluation import EvaluationPipeline
 
 class MainClass:
     
@@ -39,9 +40,18 @@ class MainClass:
             logger.exception(e)
             raise e
 
+    def callModelEvaluation(self):
+        try:
+            evaluation_pipeline = EvaluationPipeline()
+            evaluation_pipeline.main()
+        except Exception as e:
+            logger.exception(e)
+            raise e
+
 
 if __name__ == "__main__":
     cls = MainClass()
     cls.callDataIngestion()
     cls.callPrepareBaseModel()
     cls.callModelTraining()
+    cls.callModelEvaluation()

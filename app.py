@@ -20,7 +20,7 @@ class ClientApp:
 @cross_origin()
 def home():
     # Render the homepage for the web application
-    return render_template('home.html')
+    return render_template('index.html')
 
 @app.route("/train", methods=['GET','POST'])
 @cross_origin()

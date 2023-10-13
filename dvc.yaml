@@ -1,0 +1,67 @@
+stages:
+  data_ingestion:
+    cmd: python src/DLProject/pipeline/step_01_data_ingestion.py
+    deps:
+      - src/DLProject/pipeline/step_01_data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone # CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+
+  prepare_base_model:
+    cmd: python src/DLProject/pipeline/step_02_prepare_base_model.py
+    deps:
+      - src/DLProject/pipeline/step_02_prepare_base_model.py
+      - config/config.yaml
+    params:
+      - IMAGE_SIZE
+      - INCLUDE_TOP
+      - CLASSES
+      - WEIGHTS
+      - LEARNING_RATE
+    outs:
+      - artifacts/prepare_base_model
+
+  training:
+    cmd: python src/DLProject/pipeline/step_03_model_training.py
+    deps:
+      - src/DLProject/pipeline/step_03_model_training.py
+      - config/config.yaml
+      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+      - artifacts/prepare_base_model
+    params:
+      - VALIDATION_SPLIT
+      - IMAGE_SIZE
+      - BATCH_SIZE
+      - INTERPOLATION
+      - VALIDATION_DATA_GENERATOR_SUBSET
+      - VALIDATION_DATA_GENERATOR_SHUFFLE
+      - AUGMENTATION
+      - ROTATION_RANGE
+      - HORIZONTAL_FLIP
+      - WIDTH_SHIFT_RANGE
+      - HEIGH_SHIFT_RANGE
+      - SHEAR_RANGE
+      - ZOOM_RANGE
+      - TRAINING_DATA_GENERATOR_SUBSET
+      - TRAINING_DATA_GENERATOR_SHUFFLE
+      - EPOCHS
+    outs:
+      - artifacts/training/model.h5
+  
+  evaluation:
+    cmd: python src/DLProject/pipeline/step_04_model_evaluation.py
+    deps:
+      - src/DLProject/pipeline/step_04_model_evaluation.py
+      - config/config.yaml
+      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+      - artifacts/training/model.h5
+    params:
+      - VALIDATION_SPLIT
+      - IMAGE_SIZE
+      - BATCH_SIZE
+      - INTERPOLATION
+      - VALIDATION_DATA_GENERATOR_SUBSET
+      - VALIDATION_DATA_GENERATOR_SHUFFLE
+    metrics:
+    - scores.json:
+        cache: false

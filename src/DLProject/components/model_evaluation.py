@@ -92,7 +92,7 @@ class Evaluation:
     def log_into_mlflow(self):
         # Set the MLflow registry URI
         mlflow.set_registry_uri(self.config.mlflow_uri)
-
+        mlflow.set_tracking_uri
         # Get the tracking URL type from the tracking URI
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
         

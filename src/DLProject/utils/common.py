@@ -6,6 +6,7 @@ from DLProject import logger
 from box.exceptions import BoxValueError
 import os
 import json
+import base64
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
@@ -88,3 +89,18 @@ def save_json(path: Path, data: dict):
     except (FileNotFoundError, PermissionError, OSError) as e:
         logger.error(f"Error saving JSON file: {e}")
         raise ValueError(f"Failed to save JSON file at: {path}")
+
+
+def decodeImage(imgstring, fileName):
+    try:
+        # Decode the base64-encoded image string into binary data
+        imgdata = base64.b64decode(imgstring)
+        # Open the specified file in binary write mode and save the image data
+        with open(fileName, 'wb') as f:
+            f.write(imgdata)
+
+        logger.info(f"Image Decoded Successfully and Saved into {fileName}")
+
+    except Exception as e:
+        logger.error(f"Failed to Decode the Image or Failed to Saved in {fileName}: {str(e)}")
+        raise e

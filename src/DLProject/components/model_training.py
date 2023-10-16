@@ -2,6 +2,8 @@ from DLProject import logger
 from DLProject.entity.config_entity import TrainingConfig
 import tensorflow as tf
 from pathlib import Path
+import os
+import shutil
 
 class Training:
     def __init__(self, config: TrainingConfig):
@@ -86,6 +88,22 @@ class Training:
             # Log an error message if there's an issue with model saving
             logger.error("Error saving trained model: %s", str(e))
 
+    @staticmethod
+    def copy_model(path: Path, artifacts_model: Path):
+        try:
+            # Get the directory name
+            directory_name = os.path.dirname(path)
+            os.makedirs(directory_name, exist_ok=True)
+
+            # Copy the model file to the newly created folder
+            shutil.copy(artifacts_model, directory_name)
+            
+            # Log a message indicating that the model has been successfully copied
+            logger.info("Trained Model copied successfully to: %s", path)
+        except Exception as e:
+            # Log an error message if there's an issue with model copying
+            logger.error("Error copying trained model: %s", str(e))
+
     def train(self):
         # Calculate the number of steps per epoch and validation steps
         self.steps_per_epoch = self.train_generator.samples // self.train_generator.batch_size
@@ -111,3 +129,6 @@ class Training:
             path=self.config.trained_model_path,
             model=self.model
         )
+
+        # copy the trained model for further use in prediction pipeline
+        self.copy_model(self.config.copy_trained_model_path, self.config.trained_model_path)

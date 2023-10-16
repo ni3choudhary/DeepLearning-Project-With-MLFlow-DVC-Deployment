@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from DLProject import logger
 
-MODEL_PATH = os.path.join("artifacts", "training", "model.h5")
+MODEL_PATH = os.path.join("model", "model.h5")
 TUMOR_LABEL = 'Tumor'
 NORMAL_LABEL = 'Normal'
 WIDTH, HEIGHT = 224, 224

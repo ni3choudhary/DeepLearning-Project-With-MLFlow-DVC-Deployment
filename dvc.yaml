@@ -5,7 +5,7 @@ stages:
       - src/DLProject/pipeline/step_01_data_ingestion.py
       - config/config.yaml
     outs:
-      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone # CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+      - artifacts/data_ingestion/kidney-ct-scan-image # CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
 
   prepare_base_model:
     cmd: python src/DLProject/pipeline/step_02_prepare_base_model.py
@@ -26,7 +26,7 @@ stages:
     deps:
       - src/DLProject/pipeline/step_03_model_training.py
       - config/config.yaml
-      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+      - artifacts/data_ingestion/kidney-ct-scan-image
       - artifacts/prepare_base_model
     params:
       - VALIDATION_SPLIT
@@ -53,7 +53,7 @@ stages:
     deps:
       - src/DLProject/pipeline/step_04_model_evaluation.py
       - config/config.yaml
-      - artifacts/data_ingestion/CT-KIDNEY-DATASET-Normal-Cyst-Tumor-Stone
+      - artifacts/data_ingestion/kidney-ct-scan-image
       - artifacts/training/model.h5
     params:
       - VALIDATION_SPLIT
